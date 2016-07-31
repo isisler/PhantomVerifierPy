@@ -3,6 +3,7 @@ from StatsClient import StatsClient
 from BLClient import BClient
 from Player import Player
 
+
 advancedPhantomTags = {}
 advancedPhantomTags[290] = "Phantom Skull"
 advancedPhantomTags[396] = "Advanced Black"
