@@ -5,13 +5,23 @@ class StatsClient:
     def GetPInfo(self, Player):
         url = 'http://battlelog.battlefield.com/bf4/user/' + Player.name
         bc = BClient()
-        response = bc.fetchURL(url)
+
+        try:
+            response = bc.fetchURL(url)
+        except Exception as e:
+            raise
 
         m = re.search("bf4/soldier/" + Player.name + "/stats/(\d+)", response)
-        Player.pid = m.group(1).strip()
-
+        if m is not None:
+            Player.pid = m.group(1).strip()
+        else:
+            raise Exception("Player ID not found")
+        
         m = re.search("data-user-id=\"(\d+)\"", response, re.I)        
-        Player.uid = m.group(1).strip()
+        if m is not None:
+            Player.uid = m.group(1).strip()
+        else:
+            raise Exception("User ID not found")
 
     def GetStats(self, Player, statsType):
         if statsType == "tag":
@@ -26,9 +36,13 @@ class StatsClient:
             Url = "http://battlelog.battlefield.com/bf4/loadout/get/PLAYER/" + Player.pid + "/1/?cacherand=" + '%.2f' % time.monotonic();
 
         bc = BClient()
-        response = bc.fetchURL(Url)
-        Data = json.loads(response)
-        return Data
+
+        try:
+            response = bc.fetchURL(Url)
+            Data = json.loads(response)
+            return Data
+        except Exception as e:            
+            raise                          
 
     def GetUnlockedTags(self, Player, tagData, advPhanTags, basPhanTags):        
         advancedTags = tagData["data"]["unlockedDogTagsIndices"]["advanced"]

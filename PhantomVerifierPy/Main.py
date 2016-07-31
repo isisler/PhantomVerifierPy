@@ -1,8 +1,7 @@
-import webbrowser, os
+import webbrowser, os, sys
 from StatsClient import StatsClient
 from BLClient import BClient
 from Player import Player
-
 
 advancedPhantomTags = {}
 advancedPhantomTags[290] = "Phantom Skull"
@@ -17,44 +16,78 @@ basicPhantomTags[287] = "Giants of Karelia"
 
 ##==========================================================================================================
 
-name = input("Enter user name: ")
-P = Player(name)
-sc = StatsClient()
-sc.GetPInfo(P)
-print(P.name)
-print(P.pid)
-print(P.uid)
-statData = sc.GetStats(P, "general")
-tagData = sc.GetStats(P, "tag")
-assignmentData = sc.GetStats(P, "assignments")
-weaponData = sc.GetStats(P, "weapons")
-loadoutData = sc.GetStats(P, "loadout")
-sc.GetUnlockedTags(P, tagData, advancedPhantomTags, basicPhantomTags)
-sc.CheckForBow(P, weaponData)
-sc.GetAssignments(P, assignmentData)
-sc.CheckForPapers(P, assignmentData)
-sc.GetCammos(P, loadoutData)
-sc.CheckPremium(P, loadoutData)
-sc.CheckElevatorStatus(P)
+while(True):
+    name = input("Enter user name: ")
+    P = Player(name)
 
-print("-----------------------------------------------------------------")
-print("Premium status: " + str(P.isPremium))
-print("Assignments complete: " + str(P.assignmentsComplete))
+    nameOK = False
+    sc = StatsClient()
 
-if not P.assignmentsComplete:
-    print(P.assignments)
-
-if P.leftTag in basicPhantomTags.keys():
-    print("Left tag: " + basicPhantomTags[P.leftTag])
-else:
-    print("Left tag: " + str(P.lefTag))
-
-if P.rightTag in advancedPhantomTags.keys():
-    print("Right tag: " + advancedPhantomTags[P.rightTag])
-else:
-    print("Right tag: " + str(P.rightTag))          
+    while(not nameOK):
+        try:
+            sc.GetPInfo(P)
+        except Exception as e:
+            print(e)
+            print("\n")
+            name = input("Enter another user name or type Exit to quit: ")
+            if name == "Exit":
+                sys.exit()            
+            P = Player(name)
+            continue;
     
-print("Gun cammo correct: " + str(P.gunCammoCorrect))
-print("-----------------------------------------------------------------")    
-print("Ready for elevator: " + str(P.readyForElevator))
-print("\n")
+        nameOK = True
+        break;  
+
+    print("-----------------------------------------------------------------")
+    print("Player name: " + P.name)
+    print("Player ID: " + P.pid)
+    print("User ID: " + P.uid)
+
+    try:
+        statData = sc.GetStats(P, "general")
+        tagData = sc.GetStats(P, "tag")
+        assignmentData = sc.GetStats(P, "assignments")
+        weaponData = sc.GetStats(P, "weapons")
+        loadoutData = sc.GetStats(P, "loadout")
+
+        sc.GetUnlockedTags(P, tagData, advancedPhantomTags, basicPhantomTags)
+        sc.CheckForBow(P, weaponData)
+        sc.GetAssignments(P, assignmentData)
+        sc.CheckForPapers(P, assignmentData)
+        sc.GetCammos(P, loadoutData)
+        sc.CheckPremium(P, loadoutData)
+        sc.CheckElevatorStatus(P)
+    except Exception as e:
+        print(e)
+        continue;
+
+    print("-----------------------------------------------------------------")
+    print("Premium status: " + str(P.isPremium))
+    print("Assignments complete: " + str(P.assignmentsComplete))
+
+    if not P.assignmentsComplete:
+        print(P.assignments)
+
+    if P.leftTag in basicPhantomTags.keys():
+        print("Left tag: " + basicPhantomTags[P.leftTag])
+    else:
+        print("Left tag: " + str(P.lefTag))
+
+    if P.rightTag in advancedPhantomTags.keys():
+        print("Right tag: " + advancedPhantomTags[P.rightTag])
+    else:
+        print("Right tag: " + str(P.rightTag))          
+    
+    print("Gun cammo correct: " + str(P.gunCammoCorrect))
+    print("-----------------------------------------------------------------")    
+    print("Ready for elevator: " + str(P.readyForElevator))
+    print("\n")
+
+    cont = input("Check another player? (Y/N): ")
+
+    if cont.lower() == "y":
+        clear = lambda: os.system('cls')
+        clear()
+    else:
+        break;
+
