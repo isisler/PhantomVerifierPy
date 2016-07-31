@@ -17,7 +17,7 @@ basicPhantomTags[287] = "Giants of Karelia"
 
 ##==========================================================================================================
 
-name = "S1ngular1ty"
+name = input("Enter user name: ")
 P = Player(name)
 sc = StatsClient()
 sc.GetPInfo(P)
