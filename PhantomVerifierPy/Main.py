@@ -1,6 +1,5 @@
 import webbrowser, os, sys
 from StatsClient import StatsClient
-from BLClient import BClient
 from Player import Player
 
 advancedPhantomTags = {}
@@ -25,18 +24,19 @@ while(True):
 
     while(not nameOK):
         try:
-            sc.GetPInfo(P)
+            sc.GetPInfo(P)           
         except Exception as e:
-            print(e)
-            print("\n")
-            name = input("Enter another user name or type Exit to quit: ")
-            if name == "Exit":
-                sys.exit()            
-            P = Player(name)
-            continue;
-    
-        nameOK = True
-        break;  
+            print(e)                   
+        else: 
+            nameOK = True
+            break;  
+
+        print("\n")
+        name = input("Enter another user name or type Exit to quit: ")
+        if name.lower() == "exit":
+            sys.exit()            
+        P = Player(name)
+                
 
     print("-----------------------------------------------------------------")
     print("Player name: " + P.name)
@@ -57,6 +57,7 @@ while(True):
         sc.GetCammos(P, loadoutData)
         sc.CheckPremium(P, loadoutData)
         sc.CheckElevatorStatus(P)
+        sc.CheckPhantomStatus(P)
     except Exception as e:
         print(e)
         continue;
@@ -71,7 +72,7 @@ while(True):
     if P.leftTag in basicPhantomTags.keys():
         print("Left tag: " + basicPhantomTags[P.leftTag])
     else:
-        print("Left tag: " + str(P.lefTag))
+        print("Left tag: " + str(P.leftTag))
 
     if P.rightTag in advancedPhantomTags.keys():
         print("Right tag: " + advancedPhantomTags[P.rightTag])
@@ -81,6 +82,7 @@ while(True):
     print("Gun cammo correct: " + str(P.gunCammoCorrect))
     print("-----------------------------------------------------------------")    
     print("Ready for elevator: " + str(P.readyForElevator))
+    print("Player is Phantom: " + str(P.isPhantom))
     print("\n")
 
     cont = input("Check another player? (Y/N): ")

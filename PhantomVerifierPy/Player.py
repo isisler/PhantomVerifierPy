@@ -1,28 +1,38 @@
 class Player:
+    pid = None
+    uid = None
+    isPremium = False
+    kitID = None
+    leftTag = None
+    leftTagCorrect = False
+    rightTag = None
+    rightTagCorrect = False
+    hasBow = False
+    hasPapers = False
+    assignments = {}
+    assignmentsComplete = False
+    basicTags = []
+    advancedTags = []
+    unlockedPhantomTags = {}
+    loadout = []
+    kit = []
+    primaryWeap = []
+    secondaryWeap = []   
+    readyForElevator = False
+    primaryCammoCorrect = False
+    secondaryCammoCorrect = False
+    _gunCammoCorrect = False
+    isPhantom = False
+
     def __init__(self, Name):
-        self.name = Name
-        self.pid = None
-        self.uid = None
-        self.isPremium = False
-        self.kitID = None
-        self.leftTag = None
-        self.leftTagCorrect = False
-        self.rightTag = None
-        self.rightTagCorrect = False
-        self.hasBow = False
-        self.hasPapers = False
-        self.assignments = {}
-        self.assignmentsComplete = False
-        self.basicTags = []
-        self.advancedTags = []
-        self.unlockedPhantomTags = {}
-        self.loadout = []
-        self.kit = []
-        self.primaryWeap = []
-        self.secondaryWeap = []
-        self.primaryCammoCorrect = False
-        self.secondaryCammoCorrect = False
-        self.gunCammoCorrect = False
-        self.readyForElevator = False
+        self.name = Name      
+    
+    @property
+    def gunCammoCorrect(self):
+        _gunCammoCorrect = self.primaryCammoCorrect and self.secondaryCammoCorrect
+        return _gunCammoCorrect
+
+   
+
 
 

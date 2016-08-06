@@ -1,9 +1,10 @@
 import re, json, time
 from BLClient import BClient
+from Player import Player
 
 class StatsClient:
     def GetPInfo(self, Player):
-        url = 'http://battlelog.battlefield.com/bf4/user/' + Player.name
+        url = "http://battlelog.battlefield.com/bf4/user/" + Player.name
         bc = BClient()
 
         try:
@@ -76,6 +77,7 @@ class StatsClient:
             slug = weapons["slug"]
             if "phantom" in slug:
                 Player.hasBow = True
+
     def GetAssignments(self, Player, assignmentData):
         assignments = {}
         assignments[1] = assignmentData["data"]["allMissions"]["ghost1"]["completion"]
@@ -92,15 +94,21 @@ class StatsClient:
         Player.hasPapers = assignmentData["data"]["allMissions"]["ghost4"]["active"]
 
     def GetCammos(self, Player, loadoutData):
-        phantomGunCammo = '2691423844'
+        phantomGunCammo = "2691423844"
 
         selectedKitIndex = int(loadoutData["data"]["currentLoadout"]["selectedKit"])
         selectedKit = loadoutData["data"]["currentLoadout"]["kits"][selectedKitIndex]
         primaryWeapID = selectedKit[0]
         secondaryWeapID = selectedKit[1]
 
-        primaryWeap = loadoutData["data"]["currentLoadout"]["weapons"][primaryWeapID]
-        secondaryWeap = loadoutData["data"]["currentLoadout"]["weapons"][secondaryWeapID]
+        if primaryWeapID in loadoutData["data"]["currentLoadout"]["weapons"]:
+            primaryWeap = loadoutData["data"]["currentLoadout"]["weapons"][primaryWeapID]
+        else:
+            primaryWeap = "Unknown"
+        if secondaryWeapID in loadoutData["data"]["currentLoadout"]["weapons"]:
+            secondaryWeap = loadoutData["data"]["currentLoadout"]["weapons"][secondaryWeapID]
+        else:
+            secondaryWeap = "Unknown"
 
         primaryCammoCorrect = False
         if phantomGunCammo in primaryWeap:
@@ -110,15 +118,12 @@ class StatsClient:
         if phantomGunCammo in secondaryWeap:
             secondaryCammoCorrect = True
 
-        gunCammoCorrect = primaryCammoCorrect and secondaryCammoCorrect
-
         Player.kitID = selectedKitIndex
         Player.kit = selectedKit
         Player.primaryWeap = primaryWeap
         Player.secondaryWeap = secondaryWeap
         Player.primaryCammoCorrect = primaryCammoCorrect
         Player.secondaryCammoCorrect = secondaryCammoCorrect
-        Player.gunCammoCorrect = gunCammoCorrect
         Player.loadout = loadoutData["data"]["currentLoadout"]
 
     def CheckPremium(self, Player, loadoutData):        
@@ -132,7 +137,18 @@ class StatsClient:
         if Player.assignmentsComplete:
             if Player.leftTag == 283 or Player.rightTag == 396:
                 readyForElevator = True
+            
 
-        Player.readyForElevator = readyForElevator  
+        Player.readyForElevator = readyForElevator
+
+    def CheckPhantomStatus(self, Player):
+        assignmentsComplete = False
+        if Player.assignments[1] == 100 and Player.assignments[2] == 100 and Player.assignments[3] == 100 and Player.assignments[4] == 100:
+            assignmentsComplete = True
+
+        if Player.hasBow and Player.hasPapers and assignmentsComplete:
+            Player.isPhantom = True   
+
+
 
 
