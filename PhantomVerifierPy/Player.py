@@ -22,7 +22,12 @@ class Player:
     primaryCammoCorrect = False
     secondaryCammoCorrect = False
     _gunCammoCorrect = False
+    soldierCammoCorrect = False
+    soldierCammo = None
     isPhantom = False
+    name = None
+    factionID = None
+    teamID = None
 
     def __init__(self, Name):
         self.name = Name      
