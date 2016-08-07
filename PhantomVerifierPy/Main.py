@@ -6,6 +6,7 @@ import Utils
 
 serverGUID = "24debd5e-6744-48d7-8b0c-812bc261057d"
 #serverGUID = "21b6f40b-3c64-4c85-83b3-76284fd76363"
+#serverGUID = "1c7ff1da-d7b7-4865-a66f-6f18cfef1d24"
 
 sc = StatsClient()
 
@@ -45,13 +46,14 @@ def PrintResults(P):
         print("Right tag: " + str(P.rightTag))          
     
     print("Gun cammo correct: " + str(P.gunCammoCorrect))
-    print("Soldier cammo correct: " + str(P.soldierCammoCorrect))
-    if P.soldierCammoCorrect == False:        
-        print("Soldier cammo: " + str(P.soldierCammo))
+   
 
     print("-----------------------------------------------------------------")    
     print("Ready for elevator: " + str(P.readyForElevator))
     print("Player is Phantom: " + str(P.isPhantom))
+    print("Soldier cammo correct: " + str(P.soldierCammoCorrect))
+    if P.soldierCammoCorrect == False:        
+        print("Soldier cammo: " + str(P.soldierCammo))
     print("\n")
 
     
@@ -62,7 +64,10 @@ def PickFromList():
         print("Refreshing players...\n")            
         serv.UpdateServer()    
 
-        playerList = fetchPlayers()          
+        playerList = fetchPlayers()
+        if len(playerList) == 0:
+            print("No players on the server.")
+            break;                     
 
         print("Players on server: ")
         for p in playerList.keys():
