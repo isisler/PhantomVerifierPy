@@ -151,7 +151,7 @@ class StatsClient:
             if Player.soldierCammo in self.phantomSoldierCammos:
                 Player.soldierCammoCorrect = True
         else:
-            Player.soldierCammo = "Can not check in this mode"
+            Player.soldierCammo = "Unknown"
             Player.soldierCammoCorrect = False
                                                                        
         primaryCammoCorrect = False
@@ -175,12 +175,16 @@ class StatsClient:
 
     def CheckElevatorStatus(self, Player):
         readyForElevator = False
+        cammoCorrect = True
         
-        if Player.gunCammoCorrect and Player.assignmentsComplete and Player.rightTagCorrect and Player.leftTagCorrect:
+        if Player.soldierCammo != None and Player.soldierCammoCorrect == False:
+            cammoCorrect = False
+           
+        if Player.gunCammoCorrect and Player.assignmentsComplete and Player.rightTagCorrect and Player.leftTagCorrect and cammoCorrect:
             readyForElevator = True
         if Player.assignmentsComplete:
             if Player.leftTag == 283 or Player.rightTag == 396:
-                readyForElevator = True            
+                readyForElevator = True
 
         Player.readyForElevator = readyForElevator
 
