@@ -4,8 +4,8 @@ from Player import Player
 from Server import Server
 import Utils
 
-#serverGUID = "24debd5e-6744-48d7-8b0c-812bc261057d"
-serverGUID = "21b6f40b-3c64-4c85-83b3-76284fd76363"
+serverGUID = "24debd5e-6744-48d7-8b0c-812bc261057d"
+#serverGUID = "21b6f40b-3c64-4c85-83b3-76284fd76363"
 
 sc = StatsClient()
 
